@@ -8,8 +8,9 @@ class User < ApplicationRecord
   has_many :applications
   has_many :job_openings
 
-  validates_presence_of :name, :email, :role
+  validates_presence_of :name, :email, :role, :password, :password_confirmation
   validates_uniqueness_of :email
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid e-mail address" }, if: :email?
 
   after_initialize :set_default_role, :if => :new_record?
 
