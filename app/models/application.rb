@@ -2,6 +2,8 @@ class Application < ApplicationRecord
   belongs_to :user
   belongs_to :job_opening
 
+  paginates_per 9
+
   validate :ensure_user_is_applicant, :ensure_user_has_not_applied_to_job_already
 
   private

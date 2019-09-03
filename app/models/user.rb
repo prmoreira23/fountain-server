@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :applications
   has_many :job_openings
+  has_many :job_applications, through: :job_openings, source: :applications
 
   validates_presence_of :name, :email, :role, :password, :password_confirmation
   validates_uniqueness_of :email
@@ -15,11 +16,16 @@ class User < ApplicationRecord
   after_initialize :set_default_role, :if => :new_record?
 
   def applications
-    raise MethodNotSupportedToEmployer unless self.applicant?
+    return Application.where(user_id: id) unless self.applicant?
     super
   end
 
   def job_openings
+    raise MethodNotSupportedToApplicant unless self.employer?
+    super
+  end
+
+  def job_applications
     raise MethodNotSupportedToApplicant unless self.employer?
     super
   end

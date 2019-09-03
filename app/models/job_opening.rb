@@ -1,7 +1,9 @@
 class JobOpening < ApplicationRecord
   belongs_to :user, class_name: "User"
+  has_many :applications
+  
   validate :ensure_user_is_employer
-
+  paginates_per 9
   validates_presence_of :title, :description, :user
 
   def has_user_already_applied?(user)
